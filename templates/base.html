@@ -40,7 +40,7 @@
 <body>
   <nav class="navbar navbar-expand-lg navbar-light bg-navbar">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">
+      <a class="navbar-brand" href="{{ url_for('index') }}">
         <img src="/static/images/music.png" alt="" width="30" height="24" class="d-inline-block align-text-top">
         World2 Music</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -50,19 +50,21 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
+            <a class="nav-link{% if request.path == '/' %} active{% endif %}" aria-current="page" href="{{ url_for('index') }}">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('login_user') }}">Log in</a>
+            <a class="nav-link{% if request.path == '/login' %} active{% endif %}" href="{{ url_for('login_user') }}">Log in</a>
           </li>
           <li class="nav-item">
-            <a href="{{ url_for('reg_user') }}" class="nav-link">Register</a>
+            <a href="{{ url_for('reg_user') }}" class="nav-link{% if request.path == '/register' %} active{% endif %}">Register</a>
           </li>
         </ul>
+        {% if request.path == '/' %}
         <form class="d-flex">
           <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
           <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
+        {% endif %}
       </div>
     </div>
   </nav>
