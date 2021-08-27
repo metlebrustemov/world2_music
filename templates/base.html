@@ -19,6 +19,9 @@
       background: linear-gradient(to bottom, #f1e767 0%, #feb645 100%);
       filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f1e767', endColorstr='#feb645', GradientType=0);
     }
+    .bg-sect-home{
+      background:#feb645;
+    }
     .bg-footer{
       background: #feb645;
       background: -moz-linear-gradient(top,  #feb645 0%, #f1e767 100%);
@@ -50,10 +53,10 @@
             <a class="nav-link active" aria-current="page" href="#">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Log in</a>
+            <a class="nav-link" href="{{ url_for('login_user') }}">Log in</a>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">Register</a>
+            <a href="{{ url_for('reg_user') }}" class="nav-link">Register</a>
           </li>
         </ul>
         <form class="d-flex">
