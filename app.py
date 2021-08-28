@@ -1,7 +1,7 @@
 import os
 from flask import Flask, render_template, redirect, url_for, request
 from flask_sqlalchemy import SQLAlchemy
-from wtforms import Form, BooleanField, StringField, PasswordField, validators
+from wtforms import Form, BooleanField, StringField, PasswordField, SubmitField, validators
 from wtforms.fields.html5 import EmailField
 
 app = Flask(__name__)
@@ -38,11 +38,13 @@ class RegistrationForm(Form):
     password = PasswordField('Password', [validators.DataRequired(), validators.Length(min=10, max=35), validators.EqualTo('confirm', message='Passwords must match')], render_kw={"class":"form-control"})
     confirm = PasswordField('Repeat Password', [validators.DataRequired()], render_kw={"class":"form-control"})
     accept_tos = BooleanField('Check me out', [validators.DataRequired()], render_kw={"class":"form-check-input"})
+    submitbutton = SubmitField("Register")
 
 class LoginForm(Form):
     email = EmailField('Email address', [validators.DataRequired(), validators.Length(min=8, max=35), validators.Email(message=(u'That\'s not a valid email address.'))], render_kw={"class":"form-control"})
-    password = PasswordField('Password', [validators.DataRequired()],validators.Length(min=10, max=35), render_kw={"class":"form-control"})
+    password = PasswordField('Password', [validators.DataRequired(), validators.Length(min=10, max=35)], render_kw={"class":"form-control"})
     accept_tos = BooleanField('Check me out', [validators.DataRequired()], render_kw={"class":"form-check-input"})
+    submitbutton = SubmitField("Login")
 
 @app.route("/")
 def index():
