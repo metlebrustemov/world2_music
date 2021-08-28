@@ -6,29 +6,65 @@ Home Page
 
 {% block body %} 
 <section class="bg-sect-home vh-100">
-    <div class="container">
+    <div class="container pt-5">
         <div class="pt-3">
-            <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">User</th>
-                    <th scope="col">Music Name</th>
-                    <th scope="col">Author</th>
-                    <th scope="col"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td> <a href="" class="btn btn-primary"><i class="bi bi-music-note-beamed"></i>  <i class="bi bi-play-circle"></i></a></td>
-                  </tr>
-                </tbody>
-              </table>
+            <div class="row p-3 mb-4 shadow">
+              <div class="col-1">#</div>
+              <div class="col-2">User</div>
+              <div class="col-3">Music Name</div>
+              <div class="col-3">Author</div>
+              <div class="col-3"></div>
+            </div>
+            <div class="row p-3 m-1 shadow-sm">
+              <div class="col-1">1</div>
+              <div class="col-2">@admin</div>
+              <div class="col-3">Moon Sonata</div>
+              <div class="col-3">Bax</div>
+              <div class="col-3">
+                <audio id="audio1" preload="none">
+                  <source src="/static/media/horse.ogg" type="audio/ogg">
+                  <source src="/static/media/horse.mp3" type="audio/mpeg">
+                  Your browser does not support the audio element.
+                </audio>
+                <div class="btn-group">
+                  <a href="#" id="control1" class="btn btn-primary"><i class="bi bi-music-note-beamed"></i>  <i class="bi bi-play-circle"></i></a>
+                  <a href="#" class="btn btn-primary"><i class="bi bi-music-note-beamed"></i>  <i class="bi bi-volume-up"></i></a>
+                  <a href="#" class="btn btn-primary"><i class="bi bi-music-note-beamed"></i>  <i class="bi bi-volume-down"></i></a>
+                </div>
+                <span class="badge bg-info text-dark">100%</span>
+              </div>
+              <div class="col-12">
+                <div class="progress my-1">
+                  <div class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+              </div>
+            </div>
         </div>
     </div>
 </section>
+{% endblock %}
+{% block script %}
+<script>
+    var ply = '<i class="bi bi-music-note-beamed"></i>  <i class="bi bi-play-circle"></i>'
+    var ps = '<i class="bi bi-music-note-beamed"></i>  <i class="bi bi-pause-circle"></i>'
+    var aud = document.getElementById('audio1'),
+    ctrl = document.getElementById('control1');
+
+    ctrl.onclick = function () {
+      aud.volume = 1.0;
+        // Update the Button
+        var pause = ctrl.innerHTML === ps;
+        ctrl.innerHTML = pause ? ply : ps;
+
+        // Update the Audio
+        var method = pause ? 'pause' : 'play';
+        aud[method]();
+
+        // Prevent Default Action
+        return false;
+    };
+    aud.onended = function() {
+      ctrl.innerHTML = ply;
+    };
+</script>
 {% endblock %}

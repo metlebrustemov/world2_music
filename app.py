@@ -18,6 +18,16 @@ class User(db.Model):
     def __repr__(self):
         return '<User %r>' % self.username
 
+class W2Media(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer,nullable=False)
+    name = db.Column(db.String(80), nullable=False)
+    author = db.Column(db.String(120), unique=True, nullable=False)
+    u_name = db.Column(db.String(100), unique=True, nullable=False) #unikal name
+
+    def __repr__(self):
+        return '<W2Media %r>' % self.u_name
+
 @app.route("/")
 def index():
     return render_template("index.html")
