@@ -24,11 +24,7 @@ Register Page
                 {{form.confirm.label(class="form-label")}}
                 {{form.confirm}}
               </div>
-            <div class="mb-3 form-check">
-              {{form.accept_tos}}
-              {{form.accept_tos.label(class="form-check-label")}}
-            </div>
-            {{form.submitbutton(class="btn btn-primary")}}
+            {{form.submitbutton(class="btn btn-primary me-5")}} OR <a href="{{url_for('login_user')}}" class="btn btn-secondary ms-5">Login</a>
           </form>
     </div>
 </section>

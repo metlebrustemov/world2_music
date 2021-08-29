@@ -16,11 +16,7 @@ Login Page
               {{form.password.label(class="form-label")}}
               {{form.password}}
             </div>
-            <div class="mb-3 form-check">
-              {{form.accept_tos}}
-              {{form.accept_tos.label(class="form-check-label")}}
-            </div>
-            {{form.submitbutton(class="btn btn-primary")}}
+            {{form.submitbutton(class="btn btn-primary me-5")}} OR <a href="{{url_for('reg_user')}}" class="btn btn-secondary ms-5">Register</a>
           </form>
     </div>
 </section>
