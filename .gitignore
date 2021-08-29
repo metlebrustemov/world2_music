@@ -1,4 +1,6 @@
 **/__pycache__
 *.db
 *.log
+.gitignore
+run
 
