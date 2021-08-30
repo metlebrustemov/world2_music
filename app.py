@@ -26,6 +26,7 @@ class W2Media(db.Model):
     user_id = db.Column(db.Integer,nullable=False)
     name = db.Column(db.String(80), nullable=False)
     author = db.Column(db.String(120), unique=True, nullable=False)
+    is_public = db.Column(db.Boolean(), default=True, nullable=False)
     u_name = db.Column(db.String(100), unique=True, nullable=False) #unikal name
 
     def __repr__(self):
@@ -46,12 +47,28 @@ class LoginForm(Form):
     password = PasswordField('Password', [validators.DataRequired(), validators.Length(min=10, max=35)], render_kw={"class":"form-control"})
     submitbutton = SubmitField("Login")
 
+#//////////////////////////////////////////////////////////////////////
+
+@app.template_filter("idToName")
+def idToName(id):
+    us = User.query.filter_by(id=id).first()
+    return us.username
+
+
+#//////////////////////////////////////////////////////////////////////
+
+
 @app.route("/")
 def index():
     name = None
+    us_medias = None
     if "user_name" in session:
         name = session['user_name']
-    return render_template("index.html", user_name=name)
+        us = User.query.filter_by(username=name).first()
+        us_medias = W2Media.query.filter_by(user_id=us.id).all()
+    p_medias = W2Media.query.filter_by(is_public=True).all()
+    p_medias.extend(us_medias)
+    return render_template("index.html", user_name=name, medias=p_medias)
 
 @app.route("/register", methods=['POST', 'GET'])
 def reg_user():
@@ -69,6 +86,12 @@ def reg_user():
                     db.session.add(new_user)
                     db.session.commit()
                     session['user_name'] = user_name
+                else:
+                    return render_template('message.html', msg="Passwords do not match!")
+            else:
+                return render_template('message.html', msg="This username is used!")
+        else:
+            return render_template('message.html', msg="This email is being used!")
         return redirect(url_for('index'))
     form = RegistrationForm()
     return render_template("register.html", form=form)
@@ -84,6 +107,10 @@ def login_user():
             us = User.query.filter_by(email=user_email).first()
             if us.password == user_pass:
                 session['user_name'] = us.username
+            else:
+                return render_template('message.html', msg="Passwords do not match!")
+        else:
+            return render_template('message.html', msg="This email is wrong!")
         return redirect(url_for('index'))
     form = LoginForm()
     return render_template("login.html", form=form)
@@ -93,6 +120,7 @@ def logout():
 	session.pop('user_name', None)
 	return redirect(url_for('index'))
 
+    
 
 if __name__ == "__main__":
     app.run(debug=True)
