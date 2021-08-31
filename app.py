@@ -66,8 +66,9 @@ def index():
         name = session['user_name']
         us = User.query.filter_by(username=name).first()
         us_medias = W2Media.query.filter_by(user_id=us.id).all()
-    p_medias = W2Media.query.filter_by(is_public=True).all()
-    p_medias.extend(us_medias)
+    p_medias = W2Media.query.filter_by(is_public='True').all()
+    if us_medias != None:
+        p_medias.extend(us_medias)
     return render_template("index.html", user_name=name, medias=p_medias)
 
 @app.route("/register", methods=['POST', 'GET'])
