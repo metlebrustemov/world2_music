@@ -69,6 +69,7 @@ def index():
     p_medias = W2Media.query.filter_by(is_public='True').all()
     if us_medias != None:
         p_medias.extend(us_medias)
+        p_medias = list(dict.fromkeys(p_medias))
     return render_template("index.html", user_name=name, medias=p_medias)
 
 @app.route("/register", methods=['POST', 'GET'])

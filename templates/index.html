@@ -5,7 +5,7 @@ Home Page
 {% endblock %} 
 
 {% block body %} 
-<section class="bg-sect-home vh-100">
+<section class="bg-sect-home min-vh-100">
     <div class="container pt-5">
         <div class="pt-3">
             <div class="row p-3 mb-4 shadow">
@@ -16,7 +16,7 @@ Home Page
               <div class="col-3"></div>
             </div>
             {% for media in medias %}
-            <div class="row p-3 m-1 shadow-sm">
+            <div id="mus{{media.id}}" class="row p-3 pb-5 m-1 mb-3 shadow-sm">
               <div class="col-1">{{media.id}}</div>
               <div class="col-2">@{{media.user_id|idToName}}</div>
               <div class="col-3">{{media.name}}</div>
@@ -28,14 +28,14 @@ Home Page
                 </audio>
                 <div class="btn-group">
                   <a href="#" id="control{{media.id}}" class="btn btn-primary"><i class="bi bi-music-note-beamed"></i>  <i class="bi bi-play-circle"></i></a>
-                  <a href="#" class="btn btn-primary"><i class="bi bi-music-note-beamed"></i>  <i class="bi bi-volume-up"></i></a>
-                  <a href="#" class="btn btn-primary"><i class="bi bi-music-note-beamed"></i>  <i class="bi bi-volume-down"></i></a>
+                  <a href="#" class="btn btn-primary" onclick="vup{{media.id}}()"><i class="bi bi-volume-up"></i></a>
+                  <a href="#" class="btn btn-primary" onclick="vdown{{media.id}}()"><i class="bi bi-volume-down"></i></a>
                 </div>
-                <span class="badge bg-info text-dark">100%</span>
+                <span id="au_volume{{media.id}}" class="badge bg-info text-dark">100%</span>
               </div>
               <div class="col-12">
                 <div class="progress my-1">
-                  <div class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                  <div id="time_line{{media.id}}" class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
               </div>
             </div>
@@ -51,23 +51,40 @@ Home Page
     {% for media in medias %}
     var aud{{media.id}} = document.getElementById('audio{{media.id}}'),
     ctrl{{media.id}} = document.getElementById('control{{media.id}}');
+    aud_vol{{media.id}} = document.getElementById('au_volume{{media.id}}')
+
+    aud{{media.id}}.volume = 0.75;
 
     ctrl{{media.id}}.onclick = function () {
-      aud{{media.id}}.volume = 1.0;
-        // Update the Button
         var pause{{media.id}} = ctrl{{media.id}}.innerHTML === ps;
         ctrl{{media.id}}.innerHTML = pause{{media.id}} ? ply : ps;
-
-        // Update the Audio
         var method = pause{{media.id}} ? 'pause' : 'play';
         aud{{media.id}}[method]();
-
-        // Prevent Default Action
         return false;
     };
     aud{{media.id}}.onended = function() {
       ctrl{{media.id}}.innerHTML = ply;
+      document.getElementById("time_line{{media.id}}").style.width = "0%"
     };
+    aud{{media.id}}.ontimeupdate = function() {
+      document.getElementById("time_line{{media.id}}").style.width = Math.round((aud{{media.id}}.currentTime/aud{{media.id}}.duration)*100)+"%";
+    };
+    aud{{media.id}}.addEventListener('volumechange', (event) => {
+      aud_vol{{media.id}}.innerHTML = Math.round(aud{{media.id}}.volume * 100)+'%';
+      $('html, body').animate({
+        scrollTop: $("#mus{{media.id}}").offset().top
+      }, 500);
+    });
+    function vup{{media.id}}() {
+      if (aud{{media.id}}.volume < 1.0) {
+        aud{{media.id}}.volume += 0.05;
+      }
+    }
+    function vdown{{media.id}}() {
+      if (aud{{media.id}}.volume > 0.0) {
+        aud{{media.id}}.volume -= 0.05;
+      }
+    }
     {% endfor %}
 </script>
 {% endblock %}
