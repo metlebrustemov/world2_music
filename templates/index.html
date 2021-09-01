@@ -18,7 +18,7 @@ Home Page
             {% for media in medias %}
             <div id="mus{{media.id}}" class="row p-3 pb-5 m-1 mb-3 shadow-sm">
               <div class="col-1">{{media.id}}</div>
-              <div class="col-2">@{{media.user_id|idToName}}</div>
+              <div class="col-2"><a href="{{url_for('user_home', uid=media.user_id)}}">@{{media.user_id|idToName}}</a></div>
               <div class="col-3">{{media.name}}</div>
               <div class="col-3">{{media.author}}</div>
               <div class="col-3">
@@ -26,16 +26,16 @@ Home Page
                   <source src="/static/media/{{media.u_name}}" type="audio/mpeg">
                   Your browser does not support the audio element.
                 </audio>
-                <div class="btn-group">
-                  <a href="#" id="control{{media.id}}" class="btn btn-primary"><i class="bi bi-music-note-beamed"></i>  <i class="bi bi-play-circle"></i></a>
-                  <a href="#" class="btn btn-primary" onclick="vup{{media.id}}()"><i class="bi bi-volume-up"></i></a>
-                  <a href="#" class="btn btn-primary" onclick="vdown{{media.id}}()"><i class="bi bi-volume-down"></i></a>
+                <div class="btn-group" role="group" aria-label="Music Controls">
+                  <button id="control{{media.id}}" class="btn btn-primary"><i class="bi bi-music-note-beamed"></i>  <i class="bi bi-play-circle"></i></button>
+                  <button class="btn btn-primary" onclick="vup{{media.id}}()"><i class="bi bi-volume-up"></i></button>
+                  <button class="btn btn-primary" onclick="vdown{{media.id}}()"><i class="bi bi-volume-down"></i></button>
                 </div>
-                <span id="au_volume{{media.id}}" class="badge bg-info text-dark">100%</span>
+                <span id="au_volume{{media.id}}" class="badge bg-info text-dark"></span>
               </div>
               <div class="col-12">
                 <div class="progress my-1">
-                  <div id="time_line{{media.id}}" class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                  <div id="time_line{{media.id}}" class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
               </div>
             </div>
@@ -67,13 +67,12 @@ Home Page
       document.getElementById("time_line{{media.id}}").style.width = "0%"
     };
     aud{{media.id}}.ontimeupdate = function() {
-      document.getElementById("time_line{{media.id}}").style.width = Math.round((aud{{media.id}}.currentTime/aud{{media.id}}.duration)*100)+"%";
+      var prog{{media.id}} = Math.round((aud{{media.id}}.currentTime/aud{{media.id}}.duration)*100)+"%";
+      document.getElementById("time_line{{media.id}}").style.width = prog{{media.id}};
+      document.getElementById("time_line{{media.id}}").innerHTML = prog{{media.id}};
     };
     aud{{media.id}}.addEventListener('volumechange', (event) => {
       aud_vol{{media.id}}.innerHTML = Math.round(aud{{media.id}}.volume * 100)+'%';
-      $('html, body').animate({
-        scrollTop: $("#mus{{media.id}}").offset().top
-      }, 500);
     });
     function vup{{media.id}}() {
       if (aud{{media.id}}.volume < 1.0) {

@@ -1,8 +1,9 @@
 import os
-from flask import Flask, render_template, redirect, url_for, request, session
+from flask import Flask, render_template, redirect, url_for, request, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from wtforms import Form, BooleanField, StringField, PasswordField, SubmitField, validators
 from wtforms.fields.html5 import EmailField
+from werkzeug.exceptions import HTTPException
 
 app = Flask(__name__)
 app.secret_key = b'HbfGMYwEOnLdm3USo5k7JRAzn0P3oVEHPdLSoNKku3qmKfWUjt6tsgbbnPuoYWmXNiGIjpyXtm7DZ1DbAYxx1F8LmerBW1DsaeSf'
@@ -117,12 +118,38 @@ def login_user():
     form = LoginForm()
     return render_template("login.html", form=form)
 
+@app.route("/user/<uid>")
+def user_home(uid):
+    if not(User.query.filter_by(id=uid).count()>0):
+        return render_template('message.html', msg="Thisthis does not exist!")
+    us = User.query.filter_by(id=uid).first()
+    us_medias = None
+    name = None 
+    if "user_name" in session:
+        name = session['user_name']
+        if us.username == session['user_name']:
+            us_medias = W2Media.query.filter_by(user_id=us.id).all()
+    else:
+        us_medias = [m for m in W2Media.query.filter_by(is_public='True').all() if str(m.user_id)==uid]
+    return render_template("index.html", user_name=name, medias=us_medias)
+    
+    
+
 @app.route("/logout")
 def logout():
 	session.pop('user_name', None)
 	return redirect(url_for('index'))
 
-    
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
+""" @app.errorhandler(Exception)
+def handle_error(e):
+    code = 500
+    if isinstance(e, HTTPException):
+        code = e.code
+    return jsonify(error=str(e)), code """
 
 if __name__ == "__main__":
     app.run(debug=True)

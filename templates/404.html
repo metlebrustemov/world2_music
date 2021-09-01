@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %} 
+404 Not Found
+{% endblock %} 
+
+{% block body %} 
+<section class="bg-sect-home vh-100">
+    <div class="container text-center pt-5">
+        <h1 class="text-danger m-5"><i class="bi bi-exclamation-triangle"></i>  404</h1>
+        <div class="alert alert-danger" role="alert">
+            <p>The page you requested does not exist on the server.</p><br/>
+            <p>Make sure you typed the URL correctly and try again</p>
+          </div>
+    </div>
+</section>
+{% endblock %}
