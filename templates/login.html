@@ -16,6 +16,9 @@ Login Page
               {{form.password.label(class="form-label")}}
               {{form.password}}
             </div>
+            <div>
+              <input type="hidden" name="csrf_token" id="csrf_token" value="{{csrf_token}}">
+            </div>
             {{form.submitbutton(class="btn btn-primary me-5")}} OR <a href="{{url_for('reg_user')}}" class="btn btn-secondary ms-5">Register</a>
           </form>
     </div>

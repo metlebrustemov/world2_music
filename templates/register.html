@@ -24,6 +24,9 @@ Register Page
                 {{form.confirm.label(class="form-label")}}
                 {{form.confirm}}
               </div>
+              <div>
+                <input type="hidden" name="csrf_token" id="csrf_token" value="{{csrf_token}}">
+              </div>
             {{form.submitbutton(class="btn btn-primary me-5")}} OR <a href="{{url_for('login_user')}}" class="btn btn-secondary ms-5">Login</a>
           </form>
     </div>

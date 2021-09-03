@@ -63,6 +63,10 @@
           <li class="nav-item">
             <a href="{{ url_for('reg_user') }}" class="nav-link{% if request.path == '/register' %} active{% endif %}">Register</a>
           </li>
+          {% else %}
+          <li class="nav-item">
+            <a href="{{ url_for('upload_file') }}" class="nav-link{% if request.path == '/upload' %} active{% endif %}">Add Music</a>
+          </li>
           {% endif %}
         </ul>
         {% if request.path == '/' %}
