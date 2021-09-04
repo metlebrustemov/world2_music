@@ -1,6 +1,8 @@
 import os
 import string
 import random
+import hashlib
+import datetime
 from flask import Flask, render_template, redirect, url_for, request, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from wtforms import Form, BooleanField, StringField, PasswordField, SubmitField, validators
@@ -17,6 +19,7 @@ M_UPLOAD_FOLDER = "static/media"
 M_EXTENTIONS = set(['mp3','wav'])
 app.config['UPLOAD_FOLDER'] = M_UPLOAD_FOLDER
 app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
+app.config['MAX_CONTENT_LENGTH'] = 4 * 1000 * 1000 #uploaded file max size
 
 
 db = SQLAlchemy(app)
@@ -155,6 +158,7 @@ def upload_file():
                 return render_template("message.html", msg="File not named!")
             if m_file and ext_cont(m_file.filename):
                 file_name = secure_filename(m_file.filename)
+                file_name = "{}-{}".format(datetime.datetime.strftime(datetime.datetime.utcnow(), "%s"),file_name)
                 if "music_author" in request.form and len(request.form["music_author"]) >= 5:
                     if "music_name" in request.form and len(request.form["music_name"]) >= 5:
                         m_file.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
