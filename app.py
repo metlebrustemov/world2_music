@@ -64,6 +64,7 @@ class FileUploadForm(Form):
     music_name = StringField('Music Name', [validators.DataRequired(), validators.Length(min=5, max=25)], render_kw={"class":"form-control","maxlength":"25","minlength":"5"})
     music_author = StringField('Music Author Name', [validators.DataRequired(), validators.Length(min=4, max=25)], render_kw={"class":"form-control","maxlength":"25","minlength":"5"})
     music_file = FileField("Select File", validators=[FileRequired()],render_kw={"class":"form-control"})
+    music_is_public = BooleanField("Can be accessed for each user", render_kw={"class":"form-check-input","checked":"checked","value":"1"})
     submitbutton = SubmitField("Upload")
 
 #//////////////////////////////////////////////////////////////////////
@@ -92,7 +93,7 @@ def index():
         name = session['user_name']
         us = User.query.filter_by(username=name).first()
         us_medias = W2Media.query.filter_by(user_id=us.id).all()
-    p_medias = W2Media.query.filter_by(is_public='True').all()
+    p_medias = W2Media.query.filter_by(is_public=True).all()
     if us_medias != None:
         p_medias.extend(us_medias)
         p_medias = list(dict.fromkeys(p_medias))
@@ -161,13 +162,17 @@ def upload_file():
                 file_name = "{}-{}".format(datetime.datetime.strftime(datetime.datetime.utcnow(), "%s"),file_name)
                 if "music_author" in request.form and len(request.form["music_author"]) >= 5:
                     if "music_name" in request.form and len(request.form["music_name"]) >= 5:
-                        m_file.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
                         us = User.query.filter_by(username=session["user_name"]).first()
                         au = request.form["music_author"]
                         nm = request.form['music_name']
-                        new_media = W2Media(user_id=us.id, name=nm ,author=au, is_public=True, u_name=file_name)
+                        pb = False
+                        if 'music_is_public' in request.form:
+                            if str(request.form["music_is_public"]) == "1":
+                                pb = True
+                        new_media = W2Media(user_id=us.id, name=nm ,author=au, is_public=pb, u_name=file_name)
                         db.session.add(new_media)
                         db.session.commit()
+                        m_file.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
                         return redirect(url_for('index'))
                     else:
                         return render_template("message.html", msg="The name of the music is very short!")
@@ -196,7 +201,7 @@ def user_home(uid):
         if us.username == session['user_name']:
             us_medias = W2Media.query.filter_by(user_id=us.id).all()
     else:
-        us_medias = [m for m in W2Media.query.filter_by(is_public='True').all() if str(m.user_id)==uid]
+        us_medias = [m for m in W2Media.query.filter_by(is_public=True).all() if str(m.user_id)==uid]
     return render_template("index.html", user_name=name, medias=us_medias)
     
     

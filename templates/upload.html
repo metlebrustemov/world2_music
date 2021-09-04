@@ -23,7 +23,17 @@ Upload Music
         <div>
           <input type="hidden" name="csrf_token" id="csrf_token" value="{{csrf_token}}">
         </div>
-        {{form.submitbutton(class="btn btn-primary me-5")}} 
+        <div class="row">
+          <div class="col-9">
+            <div class="form-check">
+              {{form.music_is_public}}
+              {{form.music_is_public.label(class="form-check-label ms-3")}}  
+            </div>
+          </div>
+          <div class="col-3 text-end">
+            {{form.submitbutton(class="btn btn-primary me-0")}} 
+          </div>
+        </div>
       </form>
     </div>
 </section>
