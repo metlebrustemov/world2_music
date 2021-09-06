@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %} 
+Delete Music
+{% endblock %} 
+
+{% block body %} 
+<section class="bg-sect-home vh-100">
+    <div class="container pt-5">
+        <h1 class="text-warning bg-danger text-center rounded-pill">Are you sure you want to permanently delete this file?</h1>
+        <div class="row m-3 mt-5">
+            <div class="col-4">Music Author:<br/><b>{{media.author}}</b></div>
+            <div class="col-4">Music Name:<br/><b>{{media.name}}</b></div>
+            <div class="col-4">
+                <form action="{{url_for('delete', m_id=media.id)}}" method="POST">
+                    <input type="hidden" name="csrf_token" value="{{csrf}}">
+                    <button type="submit" class="btn btn-danger">DELETE</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

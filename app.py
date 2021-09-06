@@ -189,10 +189,34 @@ def upload_file():
     else:
         return render_template("message.html", msg="You don't have permission to this page!")
 
+
+@app.route("/delete/<m_id>", methods=['POST', 'GET'])
+def delete(m_id):
+    if "user_name" in session:
+        name = session['user_name']
+        us = User.query.filter_by(username=name).first()
+        if W2Media.query.filter_by(id=m_id).count() > 0:
+            media = W2Media.query.filter_by(id=m_id).first()
+            if (media.user_id) != (us.id):
+                return render_template("message.html", msg="This music is not yours!")
+            if request.method == "POST" and request.form['csrf_token'] == session["csrf_token"]:
+                os.remove(os.path.join(app.config['UPLOAD_FOLDER'], media.u_name))
+                db.session.delete(media)
+                db.session.commit()
+                session.pop('csrf_token', None)
+                return redirect(url_for("index")) # !!! Bura hazir deyik
+            csrf = csrf_text(size=64)
+            session["csrf_token"] = csrf
+            return render_template("delete.html", csrf=csrf, media=media, user_name=name)
+        return render_template("message.html", msg="The music you wanted to delete could not be found!")
+    else:
+        return render_template("message.html", msg="You don't have permission to this page!")
+
+
 @app.route("/user/<uid>")
 def user_home(uid):
     if not(User.query.filter_by(id=uid).count()>0):
-        return render_template('message.html', msg="Thisthis does not exist!")
+        return render_template('message.html', msg="This user does not exist!")
     us = User.query.filter_by(id=uid).first()
     us_medias = None
     name = None 
@@ -218,3 +242,4 @@ def page_not_found(e):
 
 if __name__ == "__main__":
     app.run(debug=False)
+    
