@@ -1,7 +1,6 @@
 import os
 import string
 import random
-import hashlib
 import datetime
 from flask import Flask, render_template, redirect, url_for, request, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
@@ -9,7 +8,6 @@ from wtforms import Form, BooleanField, StringField, PasswordField, SubmitField,
 from wtforms.fields.html5 import EmailField
 from flask_wtf.file import FileField, FileRequired
 from werkzeug.utils import secure_filename
-from werkzeug.exceptions import HTTPException
 
 app = Flask(__name__)
 app.secret_key = b'HbfGMYwEOnLdm3USo5k7JRAzn0P3oVEHPdLSoNKku3qmKfWUjt6tsgbbnPuoYWmXNiGIjpyXtm7DZ1DbAYxx1F8LmerBW1DsaeSf'
