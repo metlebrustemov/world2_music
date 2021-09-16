@@ -18,6 +18,7 @@ M_EXTENTIONS = set(['mp3','wav'])
 app.config['UPLOAD_FOLDER'] = M_UPLOAD_FOLDER
 app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 app.config['MAX_CONTENT_LENGTH'] = 4 * 1000 * 1000 #uploaded file max size
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
 
 db = SQLAlchemy(app)
