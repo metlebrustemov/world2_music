@@ -43,7 +43,8 @@ class W2Media(db.Model):
     def __repr__(self):
         return '<W2Media %r>' % self.u_name
 
-db.create_all()
+if not os.path.isfile("./vt.db"): #Ve ya os.path.exists()
+    db.create_all()
 #//////////////////////////////////////////////////////////////////////
 
 class RegistrationForm(Form):
