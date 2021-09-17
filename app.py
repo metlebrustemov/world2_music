@@ -172,6 +172,8 @@ def upload_file():
                         new_media = W2Media(user_id=us.id, name=nm ,author=au, is_public=pb, u_name=file_name)
                         db.session.add(new_media)
                         db.session.commit()
+			if not os.path.exists(M_UPLOAD_FOLDER):
+			    os.mkdir(os.path.join("./static", "media"))
                         m_file.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
                         return redirect(url_for('index'))
                     else:
