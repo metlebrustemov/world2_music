@@ -14,6 +14,7 @@ World2 Music
               <div class="col-lg-3 col-md-4 col-sm-4 col-6">Author</div>
               <div class="col-lg-3 d-none d-lg-block"></div>
             </div>
+            {% if medias  is defined and medias != None%}
             {% for media in medias %}
             <div id="mus{{media.id}}" class="row p-3 pb-5 m-1 mb-3 shadow-sm">
               <div class="mb-1 text-truncate col-lg-3 col-md-4 col-sm-3 d-none d-sm-block"><a class="btn btn-secondary" href="{{url_for('user_home', uid=media.user_id)}}" title="Uploaded by {{media.user_id|idToName}}">@{{media.user_id|idToName}}</a></div>
@@ -38,6 +39,7 @@ World2 Music
               </div>
             </div>
             {% endfor %}
+            {% endif %}
         </div>
     </div>
 </section>

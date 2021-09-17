@@ -172,8 +172,8 @@ def upload_file():
                         new_media = W2Media(user_id=us.id, name=nm ,author=au, is_public=pb, u_name=file_name)
                         db.session.add(new_media)
                         db.session.commit()
-			if not os.path.exists(M_UPLOAD_FOLDER):
-			    os.mkdir(os.path.join("./static", "media"))
+                        if not os.path.exists(M_UPLOAD_FOLDER):
+                            os.mkdir(os.path.join("./static", "media"))
                         m_file.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
                         return redirect(url_for('index'))
                     else:
@@ -215,7 +215,7 @@ def delete(m_id):
         return render_template("message.html", msg="You don't have permission to this page!")
 
 
-@app.route("/user/<uid>")
+@app.route("/user/<uid>") # !BUG exixts
 def user_home(uid):
     if not(User.query.filter_by(id=uid).count()>0):
         return render_template('message.html', msg="This user does not exist!")
@@ -226,8 +226,11 @@ def user_home(uid):
         name = session['user_name']
         if us.username == session['user_name']:
             us_medias = W2Media.query.filter_by(user_id=us.id).all()
-    else:
-        us_medias = [m for m in W2Media.query.filter_by(is_public=True).all() if str(m.user_id)==uid]
+    else: 
+        if W2Media.query.filter_by(is_public=True).count() > 0:
+            us_medias = [m for m in W2Media.query.filter_by(is_public=True).all() if str(m.user_id)==uid]
+    if us_medias and not (len(us_medias)>0):
+        us_medias = None;
     return render_template("index.html", user_name=name, medias=us_medias)
     
     
