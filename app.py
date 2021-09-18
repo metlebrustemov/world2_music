@@ -222,15 +222,12 @@ def user_home(uid):
     us = User.query.filter_by(id=uid).first()
     us_medias = None
     name = None 
-    if "user_name" in session:
+    if ("user_name" in session) and (us.username == session['user_name']):
         name = session['user_name']
-        if us.username == session['user_name']:
-            us_medias = W2Media.query.filter_by(user_id=us.id).all()
+        us_medias = W2Media.query.filter_by(user_id=us.id).all()
     else: 
         if W2Media.query.filter_by(is_public=True).count() > 0:
             us_medias = [m for m in W2Media.query.filter_by(is_public=True).all() if str(m.user_id)==uid]
-    if us_medias and not (len(us_medias)>0):
-        us_medias = None;
     return render_template("index.html", user_name=name, medias=us_medias)
     
     
