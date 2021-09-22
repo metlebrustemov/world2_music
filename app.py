@@ -43,7 +43,7 @@ class W2Media(db.Model):
     def __repr__(self):
         return '<W2Media %r>' % self.u_name
 
-if not os.path.isfile("./vt.db"): #Ve ya os.path.exists()
+if not os.path.isfile(os.getcwd()+"/"+"vt.db"): #Ve ya os.path.exists()
     db.create_all()
 #//////////////////////////////////////////////////////////////////////
 
@@ -215,7 +215,7 @@ def delete(m_id):
         return render_template("message.html", msg="You don't have permission to this page!")
 
 
-@app.route("/user/<uid>") # !BUG exixts
+@app.route("/user/<uid>") 
 def user_home(uid):
     if not(User.query.filter_by(id=uid).count()>0):
         return render_template('message.html', msg="This user does not exist!")
