@@ -7,7 +7,7 @@ Upload Music
 {% block body %} 
 <section class="bg-sect-home vh-100">
     <div class="container">
-      <form class="py-5" action="{{url_for('upload_file')}}", method="POST" enctype=multipart/form-data>
+      <form class="py-5" action="{{url_for('__bp_web__.upload_file')}}", method="POST" enctype=multipart/form-data>
         <div class="mb-3">
           {{form.music_name.label(class="form-label")}}
           {{form.music_name}}

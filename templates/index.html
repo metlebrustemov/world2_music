@@ -17,12 +17,12 @@ World2 Music
             {% if medias  is defined and medias != None%}
             {% for media in medias %}
             <div id="mus{{media.id}}" class="row p-3 pb-5 m-1 mb-3 shadow-sm">
-              <div class="mb-1 text-truncate col-lg-3 col-md-4 col-sm-3 d-none d-sm-block"><a class="btn btn-secondary" href="{{url_for('user_home', uid=media.user_id)}}" title="Uploaded by {{media.user_id|idToName}}">@{{media.user_id|idToName}}</a></div>
+              <div class="mb-1 text-truncate col-lg-3 col-md-4 col-sm-3 d-none d-sm-block"><a class="btn btn-secondary" href="{{url_for('__bp_web__.user_home', uid=media.user_id)}}" title="Uploaded by {{media.user_id|idToName}}">@{{media.user_id|idToName}}</a></div>
               <div class="mb-1 border border-warning rounded text-truncate col-lg-3 col-md-4 col-sm-5 col-6">{{media.name}}</div>
               <div class="mb-1 border border-warning rounded text-truncate col-lg-3 col-md-4 col-sm-4 col-6">{{media.author}}</div>
               <div class="mb-1 col-lg-3 col-12 text-center">
                 <audio id="audio{{media.id}}" preload="none">
-                  <source src="/static/media/{{media.u_name}}" type="audio/mpeg">
+                  <source src="{{ url_for('__bp_web__.static', filename='media/'+media.u_name) }}" type="audio/mpeg">
                   Your browser does not support the audio element.
                 </audio>
                 <div class="btn-group" role="group" aria-label="Music Controls">

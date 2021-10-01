@@ -7,7 +7,7 @@ Register Page
 {% block body %} 
 <section class="bg-sect-home vh-100">
     <div class="container">
-        <form class="py-5" action="{{url_for('reg_user')}}", method="POST">
+        <form class="py-5" action="{{url_for('__bp_web__.reg_user')}}", method="POST">
             <div class="mb-3">
                 {{form.username.label(class="form-label")}}
                 {{form.username}}
@@ -27,7 +27,7 @@ Register Page
               <div>
                 <input type="hidden" name="csrf_token" id="csrf_token" value="{{csrf_token}}">
               </div>
-            {{form.submitbutton(class="btn btn-primary me-5")}} OR <a href="{{url_for('login_user')}}" class="btn btn-secondary ms-5">Login</a>
+            {{form.submitbutton(class="btn btn-primary me-5")}} OR <a href="{{url_for('__bp_web__.login_user')}}" class="btn btn-secondary ms-5">Login</a>
           </form>
     </div>
 </section>
