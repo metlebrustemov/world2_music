@@ -1,0 +1,1 @@
+from .functions import csrf_text, ext_cont
