@@ -12,7 +12,7 @@ Delete Music
             <div class="col-4 text-truncate">Music Author:<br/><b>{{media.author}}</b></div>
             <div class="col-4 text-truncate">Music Name:<br/><b>{{media.name}}</b></div>
             <div class="col-4">
-                <form action="{{url_for('delete', m_id=media.id)}}" method="POST">
+                <form action="{{url_for('__bp_web__.delete', m_id=media.id)}}" method="POST">
                     <input type="hidden" name="csrf_token" value="{{csrf}}">
                     <button type="submit" class="btn btn-danger">DELETE</button>
                 </form>
