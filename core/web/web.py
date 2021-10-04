@@ -2,7 +2,7 @@ import datetime
 import os
 from flask import Blueprint, session, render_template, request, redirect, url_for
 from werkzeug.utils import secure_filename
-from ..models import W2Media, User, LoginForm, RegistrationForm, FileUploadForm, db, app
+from ..model import W2Media, User, LoginForm, RegistrationForm, FileUploadForm, db, app
 from ..functions import csrf_text, ext_cont
 from ..constants import M_UPLOAD_FOLDER
 
