@@ -5,10 +5,8 @@ import datetime
 from flask import request, render_template, jsonify
 from core.api import bp_api
 from core.web import bp_web
-from core.models import LoginForm, RegistrationForm, FileUploadForm, User, db, app
+from core.model import User, app
 
-if not os.path.isfile(os.getcwd()+"/vt.db"): #Ve ya os.path.exists()
-    db.create_all()
 
 
 app.register_blueprint(bp_api, url_prefix="/api")
