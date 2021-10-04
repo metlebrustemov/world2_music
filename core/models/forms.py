@@ -16,7 +16,7 @@ class LoginForm(Form):
 
 
 class FileUploadForm(Form):
-    music_name = StringField('Music Name', [validators.DataRequired(), validators.Length(min=5, max=25)], render_kw={"class":"form-control","maxlength":"25","minlength":"5"})
+    music_name = StringField('Music Name', [validators.DataRequired(), validators.Length(min=2, max=25)], render_kw={"class":"form-control","maxlength":"25","minlength":"5"})
     music_author = StringField('Music Author Name', [validators.DataRequired(), validators.Length(min=4, max=25)], render_kw={"class":"form-control","maxlength":"25","minlength":"5"})
     music_file = FileField("Select File", validators=[FileRequired()],render_kw={"class":"form-control"})
     music_is_public = BooleanField("Can be accessed for each user", render_kw={"class":"form-check-input","checked":"checked","value":"1"})
