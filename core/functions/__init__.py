@@ -1,1 +1,1 @@
-from .functions import csrf_text, ext_cont
+from .functions import csrf_text, ext_cont, is_email

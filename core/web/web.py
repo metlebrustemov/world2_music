@@ -2,9 +2,9 @@ import datetime
 import os
 from flask import Blueprint, session, render_template, request, redirect, url_for
 from werkzeug.utils import secure_filename
-from ..model import W2Media, User, LoginForm, RegistrationForm, FileUploadForm, db, app
-from ..functions import csrf_text, ext_cont
-from ..constants import M_UPLOAD_FOLDER
+from .. model import W2Media, User, LoginForm, RegistrationForm, FileUploadForm, db, app
+from .. functions import csrf_text, ext_cont
+from .. constants import M_UPLOAD_FOLDER
 
 bp_web = Blueprint("__bp_web__", __name__, template_folder="../../templates", static_folder='../../static/', static_url_path="/")
 
