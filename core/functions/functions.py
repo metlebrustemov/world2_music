@@ -2,7 +2,13 @@ import string
 import random
 import re
 import hashlib
+import os
+import base64
+from cryptography.fernet import Fernet
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from .. constants import M_EXTENTIONS
+from .. model import app
 
 def ext_cont(file_name):
    return '.' in file_name and \
@@ -19,7 +25,7 @@ def is_email(email):
 
 def get_fernet(passwd:str, force:bool):
     passwd = passwd.encode("utf-8")
-    key_file_name = "./secret/"+hashlib.md5(passwd).hexdigest()+hashlib.sha512(passwd).hexdigest()
+    key_file_name = app.config["KEY_FILE_PATH"]
     if os.path.isfile(key_file_name):
         f= open(key_file_name, 'rb')
         key = f.read()

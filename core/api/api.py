@@ -1,6 +1,8 @@
+import time
+import base64
 from flask import Blueprint, request, jsonify
-from .. model import User, db
-from .. functions import is_email
+from .. model import User, db, app
+from .. functions import is_email, encrypt, decrypt
 
 bp_api = Blueprint("__bp_api__", __name__, template_folder="../../templates")
 
@@ -44,7 +46,12 @@ def api_login():
     if User.query.filter_by(email=user_email).count()>0:
         us = User.query.filter_by(email=user_email).first()
         if us.password == user_pass:
-            return jsonify(type="success", code=200, token=us.username+us.email), 200
+            cur_time = str(time.time())
+            cur_token = base64.b64encode(encrypt(data=us.username+us.email+cur_time, password=str(app.secret_key))).decode("utf-8")
+            us.last_login = cur_time
+            us.u_token = cur_token
+            db.session.commit()
+            return jsonify(type="success", code=200, token=cur_token), 200
         else:
             return jsonify(type="error", code=400, error="Passwords do not match!"), 400
     else:
