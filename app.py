@@ -34,6 +34,12 @@ def page_not_allowed(e):
         return jsonify(type="error", code=str(e.code), error=str(e)), e.code
     return render_template('405.html'), 405
 
+@app.errorhandler(500)
+def page_not_found(e):
+    if request.path.startswith("/api/"):
+        return jsonify(type="error", code=str(e.code), error=str(e)), e.code
+    return render_template('500.html'), 500
+
 
 if __name__ == "__main__":
     app.run(debug=False)
