@@ -24,19 +24,19 @@ def idToName(id):
 
 @app.errorhandler(404)
 def page_not_found(e):
-    if request.path.startswith("/api/"):
+    if request.path.startswith("/api/") and request.method == "POST":
         return jsonify(type="error", code=str(e.code), error=str(e)), e.code
     return render_template('404.html'), 404
 
 @app.errorhandler(405)
 def page_not_allowed(e):
-    if request.path.startswith("/api/"):
+    if request.path.startswith("/api/") and request.method == "POST":
         return jsonify(type="error", code=str(e.code), error=str(e)), e.code
     return render_template('405.html'), 405
 
 @app.errorhandler(500)
-def page_not_found(e):
-    if request.path.startswith("/api/"):
+def internal_server_error(e):
+    if request.path.startswith("/api/") and request.method == "POST":
         return jsonify(type="error", code=str(e.code), error=str(e)), e.code
     return render_template('500.html'), 500
 
