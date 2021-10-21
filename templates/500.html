@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %} 
+Internal Server Error
+{% endblock %} 
+
+{% block body %} 
+<section class="bg-sect-home vh-100">
+    <div class="container text-center pt-5">
+        <h1 class="text-danger m-5"><i class="bi bi-exclamation-triangle"></i>  500</h1>
+        <div class="alert alert-danger" role="alert">
+            <p>The server encountered an internal error and was unable to complete your request.</p><br/>
+            <p>Either the server is overloaded or there is an error in the application.</p>
+          </div>
+    </div>
+</section>
+{% endblock %}
