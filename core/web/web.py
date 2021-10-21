@@ -1,9 +1,11 @@
 import datetime
 import os
+import time
+import base64
 from flask import Blueprint, session, render_template, request, redirect, url_for
 from werkzeug.utils import secure_filename
 from .. model import W2Media, User, LoginForm, RegistrationForm, FileUploadForm, db, app
-from .. functions import csrf_text, ext_cont
+from .. functions import csrf_text, ext_cont, encrypt
 from .. constants import M_UPLOAD_FOLDER
 
 bp_web = Blueprint("__bp_web__", __name__, template_folder="../../templates", static_folder='../../static/', static_url_path="/")
@@ -92,7 +94,9 @@ def upload_file():
                         if 'music_is_public' in request.form:
                             if str(request.form["music_is_public"]) == "1":
                                 pb = True
-                        new_media = W2Media(user_id=us.id, name=nm ,author=au, is_public=pb, u_name=file_name)
+                        cur_time = str(time.time())
+                        med_token = base64.b64encode(encrypt(data=file_name+str(us.id)+cur_time, password=str(app.secret_key))).decode("utf-8")
+                        new_media = W2Media(user_id=us.id, name=nm ,author=au, is_public=pb, u_name=file_name, m_token=med_token)
                         db.session.add(new_media)
                         db.session.commit()
                         if not os.path.exists(M_UPLOAD_FOLDER):
@@ -129,7 +133,7 @@ def delete(m_id):
                 db.session.delete(media)
                 db.session.commit()
                 session.pop('csrf_token', None)
-                return redirect(url_for("__bp_web__.index")) # !!! Bura hazir deyik
+                return redirect(url_for("__bp_web__.index")) # !!! Bura hazir deyil
             csrf = csrf_text(size=64)
             session["csrf_token"] = csrf
             return render_template("delete.html", csrf=csrf, media=media, user_name=name)
