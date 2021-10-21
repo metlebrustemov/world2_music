@@ -1,6 +1,6 @@
 import time
 import base64
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, url_for
 from .. model import User, W2Media, db, app
 from .. functions import is_email, encrypt, decrypt
 
@@ -81,8 +81,6 @@ def api_get_media(u_token):
     data = request.json
     user_email = str(data['user_email'])
     m_token = str(data['media_token'])
-    print(u_token)
-    print(m_token)
     if not User.query.filter_by(email=user_email).count() > 0:
         return jsonify(type="error", code=400, error="This email is wrong!"), 400
     if not User.query.filter_by(u_token=u_token).count() > 0:
@@ -95,7 +93,7 @@ def api_get_media(u_token):
     media = W2Media.query.filter_by(m_token=m_token).first()
     if user.id != media.user_id and not media.is_public:
         return jsonify(type="error", code=400, error="This music is not yours!"), 400
-    return jsonify(type="success", code=200, url=media.u_name), 200
+    return jsonify(type="success", code=200, media_url=request.url_root+url_for('__bp_web__.static', filename='media/'+media.u_name), media_name=media.name, media_author=media.author), 200
 
 @bp_api.route("/a/<u_token>", methods=['POST',])
 def api_add_media(u_token):
