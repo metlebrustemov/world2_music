@@ -20,7 +20,7 @@ class W2Media(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer,nullable=False)
     name = db.Column(db.String(80), nullable=False)
-    author = db.Column(db.String(120), unique=True, nullable=False)
+    author = db.Column(db.String(120), unique=False, nullable=False)
     is_public = db.Column(db.Boolean(), default=True, nullable=False)
     u_name = db.Column(db.String(100), unique=True, nullable=False) #unikal name
     m_token = db.Column(db.String(300), default="0", nullable=False)
