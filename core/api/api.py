@@ -13,14 +13,10 @@ from .. constants import M_UPLOAD_FOLDER
 bp_api = Blueprint("__bp_api__", __name__, template_folder="../../templates")
 api = Api(bp_api)
 
-register_parser = reqparse.RequestParser()
-register_parser.add_argument("user_name", required=True, type=str, help="User name is required.")
-register_parser.add_argument("user_email", required=True, type=str, help="User email is required.")
-register_parser.add_argument("user_pass", required=True, type=str, help="User password is required.")
-
-login_parser = reqparse.RequestParser()
-login_parser.add_argument("user_email", required=True, type=str, help="User email is required.")
-login_parser.add_argument("user_pass", required=True, type=str, help="User password is required.")
+user_parser = reqparse.RequestParser()
+user_parser.add_argument("user_name", required=True, type=str, help="User name is required.")
+user_parser.add_argument("user_email", required=True, type=str, help="User email is required.")
+user_parser.add_argument("user_pass", required=True, type=str, help="User password is required.")
 
 media_parser = reqparse.RequestParser()
 media_parser.add_argument("user_email", required=True, type=str, help="User email is required.")
@@ -31,9 +27,9 @@ media_parser.add_argument("music_is_public", required=False, type=str, help="Set
 media_parser.add_argument("music_file", required=False, type=FileStorage, location="files")
 
 
-class Register(Resource):
+class UserResource(Resource):
     def post(self):
-        data = register_parser.parse_args()
+        data = user_parser.parse_args()
         user_name = str(data['user_name'])
         print(user_name)
         if not len(user_name) in range(4, 25) :
@@ -56,11 +52,8 @@ class Register(Resource):
                 return '{"type":"error", "code":"409", "error":"This username is used!"}', 409
         else:
             return '{"type":"error", "code":"409", "error":"This email is being used!"}', 409
-
-
-class Login(Resource):
-    def post(self):
-        data = login_parser.parse_args()
+    def get(self):
+        data = user_parser.parse_args()
         user_email = str(data['user_email'])
         if not len(user_email) in range(8, 35) :
             return '{"type":"error", "code":400, "error":"User email does not comply with the rules."}', 400
@@ -83,7 +76,7 @@ class Login(Resource):
         else:
             return '{"type":"error", "code":"400", "error":"This email is wrong!"}', 400
 
-class Media(Resource):
+class MediaResource(Resource):
     def get(self, m_token=None):
         data = media_parser.parse_args()
         user_email = str(data['user_email'])
@@ -193,10 +186,8 @@ class Media(Resource):
         db.session.commit()
         return '{"type":"success", "code":200, "message":"Media deleted!"}', 200
 
-api.add_resource(Register, "/register")
-api.add_resource(Login, "/login")
-api.add_resource(Media, "/medias")
-api.add_resource(Media, "/medias/<m_token>", endpoint="medias")
+api.add_resource(UserResource, "/u")
+api.add_resource(MediaResource, "/m/<m_token>")
 
     
             
