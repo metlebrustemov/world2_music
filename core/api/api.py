@@ -14,17 +14,17 @@ bp_api = Blueprint("__bp_api__", __name__, template_folder="../../templates")
 api = Api(bp_api)
 
 user_parser = reqparse.RequestParser()
-user_parser.add_argument("user_name", type=str, default="default", help="User name is required.", location=["form", "args", "json"])
-user_parser.add_argument("user_email", required=True, type=str, help="User email is required.", location=["form", "args", "json"])
-user_parser.add_argument("user_pass", required=True, type=str, help="User password is required.", location=["form", "args", "json"])
+user_parser.add_argument("user_name", type=str, default="default", help="User name is required.", location=["json", "values"])
+user_parser.add_argument("user_email", required=True, type=str, help="User email is required.", location=["json", "values"])
+user_parser.add_argument("user_pass", required=True, type=str, help="User password is required.", location=["json", "values"])
 
 media_parser = reqparse.RequestParser()
-media_parser.add_argument("user_email", required=True, type=str, help="User email is required.", location=["form", "args", "json"])
-media_parser.add_argument("u_token", required=True, type=str, help="User token is required.", location=["form", "args", "json"])
-media_parser.add_argument("m_token", type=str, default="default", help="Media token is required.", location=["form", "args", "json"])
-media_parser.add_argument("music_author", required=False, type=str, default="default", help="Author name is required.", location=["form", "args", "json"])
-media_parser.add_argument("music_name", required=False, type=str, default="default", help="Media name is required.", location=["form", "args", "json"])
-media_parser.add_argument("music_is_public", required=False, type=bool, default=True, help="Set the content's privacy policy.", location=["form", "args", "json"])
+media_parser.add_argument("user_email", required=True, type=str, help="User email is required.", location=["json", "values"])
+media_parser.add_argument("u_token", required=True, type=str, help="User token is required.", location=["json", "values"])
+media_parser.add_argument("m_token", type=str, default="default", help="Media token is required.", location=["json", "values"])
+media_parser.add_argument("music_author", required=False, type=str, default="default", help="Author name is required.", location=["json", "values"])
+media_parser.add_argument("music_name", required=False, type=str, default="default", help="Media name is required.", location=["json", "values"])
+media_parser.add_argument("music_is_public", required=False, type=bool, default=True, help="Set the content's privacy policy.", location=["json", "values"])
 media_parser.add_argument("music_file", required=False, type=FileStorage, location="files")
 
 
@@ -34,7 +34,6 @@ class UserResource(Resource):
         if data["user_name"] == "default":
             return '{"type":"error", "code":400, "error":"User name (user_name) is required!"}', 400
         user_name = str(data['user_name'])
-        print(user_name)
         if not len(user_name) in range(4, 25) :
             return '{"type":"error", "code":"400", "error":"Username does not comply with the rules."}', 400
         user_email = str(data['user_email'])
@@ -56,7 +55,7 @@ class UserResource(Resource):
         else:
             return '{"type":"error", "code":"409", "error":"This email is being used!"}', 409
     def get(self):
-        data = user_parser.parse_args()
+        data = user_parser.parse_args() 
         user_email = str(data['user_email'])
         if not len(user_email) in range(8, 35) :
             return '{"type":"error", "code":400, "error":"User email does not comply with the rules."}', 400
